@@ -772,7 +772,7 @@ class ajaxCRUD{
 
     function insertHeader($ajax_file = "ajaxCRUD.inc.php"){
 
-        global $headerAdded;
+        global $headerAdded, $LOCAL_JS;
         $headerAdded = TRUE;
 
         if ($this->css_file == ''){
