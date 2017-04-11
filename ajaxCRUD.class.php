@@ -1,5 +1,4 @@
 <?php
-
 /*
   Basic users should not need to edit this file
   Instead - post questions or feature requests to our forum -
@@ -135,7 +134,6 @@ class ajaxCRUD {
   var $css = true;  //indicates a css spredsheet WILL be used
   var $add = true;    //adding is ok
   var $includeTableHeaders = true; //include table headers (default)
-  var $includeJQuery = true; //include jquery (default)
   var $allowHeaderInsert = true; //insert the jquery/css files by default [you can insert whereever you want in your script with $yourObject->insertHeader();]
   var $doActionOnShowTable; //boolean var. When true and showTable() is called, doAction() is also called. turn off when you want to only have a table show in certain conditions but CRUD operations can take place on the table "behind the scenes"
   var $item_plural;
@@ -273,12 +271,14 @@ class ajaxCRUD {
 
     //global variable - for allowing multiple ajaxCRUD tables on one page
     global $num_ajaxCRUD_tables_instantiated;
-    if ($num_ajaxCRUD_tables_instantiated === "")
+    if ($num_ajaxCRUD_tables_instantiated === "") {
       $num_ajaxCRUD_tables_instantiated = 0;
+    }
 
     global $headerAdded;
-    if ($headerAdded === "")
+    if ($headerAdded === "") {
       $$headerAdded = FALSE;
+    }
 
     $this->showCheckbox = false;
     $this->ajaxcrud_root = $ajaxcrud_root;
@@ -389,10 +389,6 @@ class ajaxCRUD {
 
   function disableTableHeaders() {
     $this->includeTableHeaders = false;
-  }
-
-  function disableJQuery() {
-    $this->includeJQuery = false;
   }
 
   function setCSSFile($css_file) {
@@ -719,75 +715,73 @@ class ajaxCRUD {
       $this->css_file = 'default.css';
     }
 
-    /* Load Javascript dependencies */
-    if ($this->includeJQuery) {
-      //echo "<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js\"></script>\n"; //rel 3.5 - using jquery instead of protoculous
-      //echo "<script type=\"text/javascript\" src=\"http://code.jquery.com/jquery-latest.min.js\"></script>\n"; //rel 6 - using latest version of jquery from jquery site (http://docs.jquery.com/Plugins/Validation/Validator)
-      if (isset($LOCAL_JS) && $LOCAL_JS) {
-        echo "<script type=\"text/javascript\" src=\"" . $this->ajaxcrud_root . "js/jquery.min.js\"></script>\n";          // EDITED 1/16/2012 - library on code.jquery site stopped working correctly!! (giving error TypeError: $.browser is undefined)
-        echo "<script type=\"text/javascript\" src=\"" . $this->ajaxcrud_root . "js/jquery.validate.min.js\"></script>\n"; //rel 6 - added ability to validate forms fields
-        echo "<script type=\"text/javascript\" src=\"" . $this->ajaxcrud_root . "js/jquery.maskedinput.js\"></script>\n";  //rel 6 - ability to mask fields (http://digitalbush.com/projects/masked-input-plugin/)
-      } else {
-        echo "<script type=\"text/javascript\" src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js\"></script>\n"; // EDITED 1/16/2012 - library on code.jquery site stopped working correctly!! (giving error TypeError: $.browser is undefined)
-        echo "<script type=\"text/javascript\" src=\"http://ajax.aspnetcdn.com/ajax/jquery.validate/1.7/jquery.validate.min.js\"></script>\n"; //rel 6 - added ability to validate forms fields
-        echo "<script type=\"text/javascript\" src=\"http://ajaxcrud.com/code/jquery.maskedinput.js\"></script>\n"; //rel 6 - ability to mask fields (http://digitalbush.com/projects/masked-input-plugin/)
+    if (isset($LOCAL_JS) && $LOCAL_JS) {
+      ?>
+      <script type="text/javascript" src="<?php echo $this->ajaxcrud_root; ?>js/jquery.min.js"></script>
+      <script type="text/javascript" src="<?php echo $this->ajaxcrud_root; ?>js/jquery.validate.min.js"></script>
+      <script type="text/javascript" src="<?php echo $this->ajaxcrud_root; ?>js/jquery.maskedinput.js"></script>
+      <script type="text/javascript" src="<?php echo $this->ajaxcrud_root; ?>js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="<?php echo $this->ajaxcrud_root; ?>js/bootstrap-select.min.js"></script>
+
+      <link href="<?php echo $this->ajaxcrud_root; ?>css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen" />
+      <link href="<?php echo $this->ajaxcrud_root; ?>css/bootstrap-select.min.css" rel="stylesheet" type="text/css" media="screen" />
+    <?php } else { ?>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="screen" />
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css" rel="stylesheet" type="text/css" media="screen" />
+    <?php } ?>
+    <script type="text/javascript" src="<?php echo $this->ajaxcrud_root; ?>js/validation.js"></script>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script type="text/javascript" src="<?php echo $this->ajaxcrud_root; ?>js/javascript_functions.js"></script>
+    <link href="<?php echo $this->ajaxcrud_root; ?>css/<?php echo $this->css_file; ?>" rel="stylesheet" type="text/css" media="screen" />
+
+
+    <script type="text/javascript">
+      ajax_file = "<?php echo $this->ajax_file; ?>";
+      this_page = "<?php echo $_SERVER['REQUEST_URI']; ?>";
+      loading_image_html = "<?php echo $this->loading_image_html; ?>";
+
+      function validateAddForm(tableName, usePost) {
+        var validator = $('#add_form_' + tableName).validate();
+        if (validator.form()) {
+          if (!usePost) {
+            setLoadingImage(tableName);
+            var fields = getFormValues(document.getElementById('add_form_' + tableName), '');
+            fields = fields + '&table=' + tableName;
+            var req = '<?php echo $this->getThisPage(); ?>action=add&' + fields;
+            clearForm('add_form_' + tableName);
+            sndAddReq(req, tableName);
+            return false;
+          } else {
+            $('#add_form_' + tableName).submit();
+          }
+
+        }
+        return false;
       }
-      echo "<script type=\"text/javascript\" src=\"" . $this->ajaxcrud_root . "js/validation.js\"></script>\n";
-    }
-    echo "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />\n";
-    echo "<script type=\"text/javascript\" src=\"" . $this->ajaxcrud_root . "js/javascript_functions.js\"></script>\n";
-    echo "<link href=\"" . $this->ajaxcrud_root . "css/" . $this->css_file . "\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\" />\n";
 
-    echo "
-            <script>\n
-                ajax_file = \"$this->ajax_file\"; \n
-                this_page = \"" . $_SERVER['REQUEST_URI'] . "\"\n
-                loading_image_html = \"$this->loading_image_html\"; \n
+      $(document).ready(function () {
+        $("#add_form_{$this->db_table}").validate();
+      });
 
-                function validateAddForm(tableName, usePost){
-            		var validator = $('#add_form_' + tableName).validate();
-            		if (validator.form()){
-						if (!usePost){
-							setLoadingImage(tableName);
-							var fields = getFormValues(document.getElementById('add_form_' + tableName), '');
-							fields = fields + '&table=' + tableName;
-							var req = '" . $this->getThisPage() . "action=add&' + fields;
-							//validator.resetForm();
-							clearForm('add_form_' + tableName);
-							sndAddReq(req, tableName);
-							return false;
-						}
-						else{
-							//post the form normally (e.g. if using file uploads)
-							$('#add_form_' + tableName).submit();
-						}
+    </script>
 
-                    }
-                    return false;
-                }
+    <style>
+      .hand_cursor{
+        cursor: pointer;
+        cursor: hand;
+      }
 
-				$(document).ready(function(){
-					$(\"#add_form_{$this->db_table}\").validate();
-				});
-
-            </script>\n";
-    echo "
-			<style>
-				/* this will only work when your HTML doctype is in \"strict\" mode.
-					In other words - put this in your header:
-				   <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">
-				*/
-
-				.hand_cursor{
-					cursor: pointer; /* hand-shaped cursor */
-					cursor: hand; /* for IE 5.x */
-				}
-
-				.editable:hover, p.editable:hover{
-					background-color: #FFFF99;
-				}
-			</style>\n";
-
+      .editable:hover, p.editable:hover{
+        background-color: #FFFF99;
+      }
+    </style>
+    <?php
     return true;
   }
 
