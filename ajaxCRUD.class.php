@@ -269,7 +269,7 @@ class ajaxCRUD {
 
   // Constructor
   //by default ajaxCRUD assumes all necessary files are in the same dir as the script calling it (eg $ajaxcrud_root = "")
-  function ajaxCRUD($item, $db_table, $db_table_pk, $ajaxcrud_root = "") {
+  function __construct($item, $db_table, $db_table_pk, $ajaxcrud_root = "") {
 
     //global variable - for allowing multiple ajaxCRUD tables on one page
     global $num_ajaxCRUD_tables_instantiated;
